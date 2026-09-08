@@ -1,0 +1,57 @@
+services:
+  victima-linux:
+    # Imagen con version fija para mantener un despliegue reproducible
+    image: ubuntu:24.04
+
+    # Nombre del contenedor
+    container_name: victima-linux
+
+    # Nombre del equipo dentro del contenedor
+    hostname: victima-linux
+
+    # Mantiene el contenedor ejecutandose para las pruebas
+    command: ["sleep", "infinity"]
+
+    # Conexion a la red creada para el laboratorio
+    networks:
+      - soc-net
+
+    # Puerto publicado para el laboratorio
+    ports:
+      - "2222:22"
+
+    # Elimina todas las capacidades para reducir privilegios
+    cap_drop:
+      - ALL
+
+    # Se agregan solamente las capacidades necesarias
+    cap_add:
+      - CHOWN
+      - SETUID
+      - SETGID
+      - AUDIT_CONTROL
+      - AUDIT_WRITE
+
+    # Impide que los procesos obtengan privilegios adicionales
+    security_opt:
+      - no-new-privileges:true
+
+    # Limites de CPU y memoria
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1g
+
+    # Volumen para conservar los registros
+    volumes:
+      - victima-logs:/var/log
+
+# Volumen nombrado
+volumes:
+  victima-logs:
+
+# Red creada previamente
+networks:
+  soc-net:
+    external: true
