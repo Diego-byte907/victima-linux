@@ -31,6 +31,8 @@ services:
       - SETGID
       - AUDIT_CONTROL
       - AUDIT_WRITE
+      - DAC_OVERRIDE
+      - FOWNER
 
     # Impide que los procesos obtengan privilegios adicionales
     security_opt:
